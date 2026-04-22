@@ -1,112 +1,73 @@
-# ✈️ Trip Expense Splitter — Deployment Guide
+# ✈️ Splitify — Real-Time Database Setup Guide
 
-Share this app with your friends in **10 minutes**, completely free.
+Everyone sees the same data live. No data loss. Works across all phones.
 
 ---
 
 ## What you need
-- A free **GitHub** account → github.com
-- A free **Vercel** account → vercel.com
-- Your **Anthropic API key** → console.anthropic.com
+- Your existing Vercel deployment (splitify-amber.vercel.app)
+- A free Supabase account → supabase.com
+- Your Anthropic API key (already set up)
 
 ---
 
-## Step 1 — Get your Anthropic API Key
+## Step 1 — Create Supabase Project
 
-1. Go to **https://console.anthropic.com**
-2. Sign up / log in
-3. Click **"API Keys"** in the left sidebar
-4. Click **"Create Key"** → copy the key (starts with `sk-ant-...`)
-5. Save it somewhere safe — you'll need it in Step 4
-
----
-
-## Step 2 — Upload code to GitHub
-
-1. Go to **https://github.com** and sign in
-2. Click the **"+"** button (top right) → **"New repository"**
-3. Name it: `trip-expense-splitter`
-4. Set it to **Public**, click **"Create repository"**
-5. On the next page, click **"uploading an existing file"**
-6. Drag and drop **ALL files and folders** from this zip into the uploader
-7. Click **"Commit changes"**
+1. Go to https://supabase.com → Sign Up (free)
+2. Click "New Project"
+3. Name: splitify, pick Singapore region, set a password
+4. Click "Create new project" — wait 1 minute
 
 ---
 
-## Step 3 — Deploy on Vercel
+## Step 2 — Run the Database Script
 
-1. Go to **https://vercel.com** and sign in with your GitHub account
-2. Click **"Add New Project"**
-3. Find `trip-expense-splitter` in the list → click **"Import"**
-4. Under **Framework Preset**, select **"Vite"**
-5. Leave everything else as default
-6. Click **"Deploy"** — wait ~1 minute
-
----
-
-## Step 4 — Add your API Key (secret, stays on server)
-
-1. Once deployed, go to your project on Vercel dashboard
-2. Click **"Settings"** tab → **"Environment Variables"**
-3. Add a new variable:
-   - **Name:** `ANTHROPIC_API_KEY`
-   - **Value:** paste your key (`sk-ant-...`)
-4. Click **"Save"**
-5. Go to **"Deployments"** tab → click the 3 dots on your latest deployment → **"Redeploy"**
+1. In Supabase → click "SQL Editor" in left sidebar
+2. Click "New query"
+3. Open supabase-setup.sql from this folder
+4. Copy ALL the SQL → paste into editor
+5. Click "Run" — should show "Success"
 
 ---
 
-## Step 5 — Share with friends! 🎉
+## Step 3 — Get your Supabase Keys
 
-Your app is now live at a URL like:
-```
-https://trip-expense-splitter-yourname.vercel.app
-```
-
-- **Send this link to anyone** — works on iPhone & Android browsers
-- They don't need to install anything
-- **To install as an app on mobile:** open the link in Chrome/Safari → tap Share → "Add to Home Screen"
+1. Supabase → Settings (gear icon) → API
+2. Copy: Project URL (https://xxxxx.supabase.co)
+3. Copy: anon/public key (starts with eyJ...)
 
 ---
 
-## Folder structure (for reference)
+## Step 4 — Add to Vercel
 
-```
-trip-expense-splitter/
-├── api/
-│   └── claude.js        ← Secure server-side API proxy (hides your API key)
-├── src/
-│   ├── main.jsx         ← React entry point
-│   └── App.jsx          ← Main app code
-├── public/
-│   └── manifest.json    ← Makes it installable as a mobile app
-├── index.html
-├── package.json
-├── vite.config.js
-└── vercel.json
-```
+Go to vercel.com → splitify project → Settings → Environment Variables
+
+Add these two:
+  VITE_SUPABASE_URL        = your Project URL
+  VITE_SUPABASE_ANON_KEY   = your anon key
+
+Save each one.
 
 ---
 
-## How the API key stays safe
+## Step 5 — Upload new code to GitHub
 
-Your Anthropic API key is stored in Vercel's **Environment Variables** (server-side only).  
-When the app needs AI features, it calls `/api/claude` — a serverless function running on Vercel's servers — which adds the key and forwards the request to Anthropic.  
-**The key never reaches anyone's browser.** ✅
-
----
-
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| AI features don't work | Check that `ANTHROPIC_API_KEY` is set in Vercel → Settings → Environment Variables, then redeploy |
-| Page not found on refresh | Make sure `vercel.json` was uploaded |
-| Build fails | Make sure all files were uploaded including `vite.config.js` and `package.json` |
+1. Go to github.com → your splitify repo → src/ folder
+2. Upload/replace App.jsx with the new one from this zip
+3. Upload the new supabase.js file into src/ folder
+4. Vercel will auto-redeploy in ~1 minute
 
 ---
 
-## Cost
+## Done! Share with friends
 
-- **Vercel hosting:** Free (Hobby plan)
-- **Anthropic API:** Pay per use — receipt scanning + chat costs roughly ₹0.10–₹0.50 per request, very cheap for personal use
+Link: https://splitify-amber.vercel.app
+
+Now when anyone adds an expense or member, everyone sees it instantly on their phone in real time. Data is stored in Supabase database — never lost.
+
+---
+
+## Free tier limits
+- Supabase: 500MB, 50,000 rows, unlimited realtime — more than enough
+- Vercel: free
+- Anthropic AI: ~0.10-0.50 rupees per request
